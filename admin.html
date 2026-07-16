@@ -6,7 +6,369 @@
 <title>Narin — Yönetim Paneli</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css">
+<style>
+/* =========================================================
+   NARİN — Tasarım Sistemi
+   Palet: derin bordo, ekru, dut/mürdüm, mat altın, mürekkep siyahı
+   Tipografi: Cormorant Garamond (başlık) + Jost (gövde/etiket)
+   İmza öğe: "kumaş numunesi" kategori kartları + dalgalı kumaş ayırıcılar
+   ========================================================= */
+
+:root {
+  --wine: #5C1F34;
+  --wine-deep: #3A1322;
+  --plum: #6B3654;
+  --cream: #F4ECE2;
+  --cream-soft: #EFE4D6;
+  --taupe: #A9877B;
+  --gold: #B08D57;
+  --ink: #241019;
+  --ink-soft: #4A3540;
+  --line: rgba(36, 16, 25, 0.12);
+  --white: #FFFDFB;
+
+  --font-display: "Cormorant Garamond", serif;
+  --font-body: "Jost", sans-serif;
+
+  --radius-lg: 22px;
+  --radius-md: 14px;
+  --shadow-soft: 0 18px 40px -22px rgba(58, 19, 34, 0.45);
+  --shadow-card: 0 10px 24px -16px rgba(58, 19, 34, 0.35);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+::selection { background: var(--gold); color: var(--white); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 12px;
+  color: var(--wine);
+  font-weight: 500;
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; color: var(--ink); }
+h1 { font-size: clamp(38px, 6vw, 68px); line-height: 1.02; }
+h2 { font-size: clamp(28px, 4vw, 42px); line-height: 1.08; }
+h3 { font-size: 22px; }
+p { line-height: 1.6; color: var(--ink-soft); margin: 0; }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 88px 0; }
+.section-head { max-width: 620px; margin-bottom: 44px; }
+.section-head .eyebrow { display: block; margin-bottom: 10px; }
+.section-head p { margin-top: 14px; font-size: 17px; }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(244, 236, 226, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.site-header .inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px; max-width: 1180px; margin: 0 auto;
+}
+.logo { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--wine); letter-spacing: 0.02em; }
+.logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+.nav-links a { font-size: 14px; letter-spacing: 0.03em; color: var(--ink-soft); transition: color .2s; }
+.nav-links a:hover { color: var(--wine); }
+.header-actions { display: flex; align-items: center; gap: 14px; }
+.icon-btn {
+  border: 1px solid var(--line); background: var(--white); border-radius: 999px;
+  width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;
+  position: relative; transition: border-color .2s, transform .2s;
+}
+.icon-btn:hover { border-color: var(--wine); transform: translateY(-1px); }
+.cart-count {
+  position: absolute; top: -6px; right: -6px; background: var(--wine); color: var(--white);
+  font-size: 11px; min-width: 18px; height: 18px; border-radius: 999px;
+  display: flex; align-items: center; justify-content: center; font-family: var(--font-body); font-weight: 600;
+}
+.menu-toggle { display: none; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; overflow: hidden;
+  padding: 64px 0 0;
+}
+.hero .inner {
+  max-width: 1180px; margin: 0 auto; padding: 0 24px;
+  display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center;
+}
+.hero-copy .eyebrow { margin-bottom: 18px; display:block; }
+.hero-copy p { margin-top: 20px; font-size: 18px; max-width: 460px; }
+.hero-actions { display: flex; gap: 14px; margin-top: 32px; flex-wrap: wrap; }
+.hero-figure {
+  position: relative; border-radius: var(--radius-lg); overflow: hidden;
+  aspect-ratio: 4/5; box-shadow: var(--shadow-soft);
+}
+.hero-figure img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(0.35) sepia(0.18) saturate(1.3);
+}
+.hero-figure::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(155deg, rgba(92,31,52,0.35), rgba(176,141,87,0.12) 60%, transparent);
+  mix-blend-mode: multiply;
+}
+.hero-tag {
+  position: absolute; left: 22px; bottom: 22px; background: var(--white);
+  padding: 10px 16px; border-radius: 999px; font-size: 13px; box-shadow: var(--shadow-card);
+  display: flex; align-items: center; gap: 8px;
+}
+.hero-tag::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); display: inline-block; }
+
+.drape-divider { width: 100%; height: 64px; display: block; margin-top: 48px; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 26px; border-radius: 999px; font-size: 14px; letter-spacing: 0.03em;
+  border: 1px solid transparent; transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  font-weight: 500;
+}
+.btn-primary { background: var(--wine); color: var(--white); }
+.btn-primary:hover { background: var(--wine-deep); transform: translateY(-1px); box-shadow: var(--shadow-card); }
+.btn-outline { background: transparent; border-color: var(--wine); color: var(--wine); }
+.btn-outline:hover { background: var(--wine); color: var(--white); }
+.btn-gold { background: var(--gold); color: var(--white); }
+.btn-gold:hover { background: #977540; }
+.btn-block { width: 100%; }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+.btn-sm { padding: 9px 16px; font-size: 13px; }
+
+/* ---------- Kategori "kumaş numunesi" kartları ---------- */
+.swatch-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+}
+.swatch-card {
+  position: relative; background: var(--white); border-radius: var(--radius-lg);
+  padding: 14px; box-shadow: var(--shadow-card); transition: transform .25s ease, box-shadow .25s ease;
+  border: 1px solid var(--line);
+}
+.swatch-card:hover { transform: translateY(-6px) rotate(-0.4deg); box-shadow: var(--shadow-soft); }
+.swatch-thumb {
+  aspect-ratio: 1/1; border-radius: 12px; overflow: hidden; position: relative;
+}
+.swatch-thumb img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.4) sepia(0.15); }
+.swatch-thumb::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(160deg, rgba(92,31,52,0.55), rgba(176,141,87,0.15));
+  mix-blend-mode: multiply;
+}
+.swatch-pin { position: absolute; top: 10px; right: 10px; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); box-shadow: 0 3px 8px rgba(0,0,0,0.25); z-index: 2; }
+.swatch-body { padding: 16px 6px 6px; }
+.swatch-body h3 { font-size: 20px; margin-bottom: 6px; }
+.swatch-body p { font-size: 13.5px; }
+.swatch-count { display: inline-block; margin-top: 10px; font-size: 12px; color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* ---------- Ürün kartları ---------- */
+.filter-bar {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px;
+}
+.chip {
+  padding: 9px 18px; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--white); font-size: 13.5px; color: var(--ink-soft); transition: all .18s;
+}
+.chip.active, .chip:hover { border-color: var(--wine); color: var(--wine); }
+
+.product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.product-card {
+  background: var(--white); border-radius: var(--radius-md); overflow: hidden;
+  border: 1px solid var(--line); transition: box-shadow .2s, transform .2s;
+  display: flex; flex-direction: column;
+}
+.product-card:hover { box-shadow: var(--shadow-card); transform: translateY(-3px); }
+.product-thumb { position: relative; aspect-ratio: 3/4; overflow: hidden; background: var(--cream-soft); }
+.product-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.product-card:hover .product-thumb img { transform: scale(1.05); }
+.badge-sale {
+  position: absolute; top: 10px; left: 10px; background: var(--wine); color: var(--white);
+  font-size: 11px; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em;
+}
+.badge-stock { position: absolute; top: 10px; right: 10px; background: var(--ink); color: var(--white); font-size: 11px; padding: 4px 10px; border-radius: 999px; }
+.product-info { padding: 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.product-cat { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--taupe); }
+.product-info h3 { font-size: 17px; }
+.price-row { display: flex; align-items: baseline; gap: 8px; margin-top: auto; }
+.price { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--wine); }
+.price-old { font-size: 14px; color: var(--taupe); text-decoration: line-through; }
+.product-actions { margin-top: 8px; }
+
+/* ---------- Ürün detay modalı ---------- */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(36,16,25,0.55); z-index: 90;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  opacity: 0; pointer-events: none; transition: opacity .22s ease;
+}
+.modal-overlay.open { opacity: 1; pointer-events: auto; }
+.modal-box {
+  background: var(--white); border-radius: var(--radius-lg); max-width: 880px; width: 100%;
+  max-height: 88vh; overflow: auto; display: grid; grid-template-columns: 1fr 1fr;
+  transform: translateY(14px); transition: transform .22s ease;
+}
+.modal-overlay.open .modal-box { transform: translateY(0); }
+.modal-img { aspect-ratio: 3/4; overflow: hidden; }
+.modal-img img { width: 100%; height: 100%; object-fit: cover; }
+.modal-content { padding: 32px; position: relative; }
+.modal-close {
+  position: absolute; top: 16px; right: 16px; width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--white); display: flex; align-items: center; justify-content: center;
+}
+.option-group { margin-top: 18px; }
+.option-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--taupe); margin-bottom: 8px; display: block; }
+.option-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill {
+  padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--white);
+  font-size: 13px; transition: all .15s;
+}
+.pill.active { background: var(--wine); border-color: var(--wine); color: var(--white); }
+.qty-row { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
+.qty-control { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.qty-control button { background: var(--cream-soft); border: none; width: 34px; height: 34px; font-size: 16px; }
+.qty-control span { width: 34px; text-align: center; font-size: 14px; }
+
+/* ---------- Sepet çekmecesi ---------- */
+.cart-drawer {
+  position: fixed; top: 0; right: 0; height: 100vh; width: 420px; max-width: 92vw;
+  background: var(--white); z-index: 95; transform: translateX(100%); transition: transform .3s ease;
+  display: flex; flex-direction: column; box-shadow: -20px 0 50px rgba(36,16,25,0.25);
+}
+.cart-drawer.open { transform: translateX(0); }
+.cart-header { padding: 22px 24px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+.cart-items { flex: 1; overflow-y: auto; padding: 12px 24px; }
+.cart-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.cart-item img { width: 68px; height: 84px; object-fit: cover; border-radius: 8px; }
+.cart-item-info { flex: 1; }
+.cart-item-info h4 { font-size: 14.5px; font-family: var(--font-body); font-weight: 600; margin: 0 0 4px; }
+.cart-item-meta { font-size: 12px; color: var(--taupe); }
+.cart-item-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+.cart-remove { font-size: 12px; color: var(--wine); text-decoration: underline; background: none; border: none; padding: 0; }
+.cart-empty { padding: 60px 20px; text-align: center; color: var(--taupe); }
+.cart-footer { padding: 20px 24px 26px; border-top: 1px solid var(--line); background: var(--cream-soft); }
+.cart-total-row { display: flex; justify-content: space-between; font-family: var(--font-display); font-size: 20px; font-weight: 700; margin-bottom: 14px; }
+.checkout-form { display: grid; gap: 10px; margin-bottom: 14px; }
+.checkout-form input, .checkout-form textarea {
+  width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--line); font-family: inherit; font-size: 13.5px; background: var(--white);
+}
+.checkout-form textarea { resize: vertical; min-height: 60px; }
+.overlay-dim {
+  position: fixed; inset: 0; background: rgba(36,16,25,0.4); z-index: 85;
+  opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+.overlay-dim.open { opacity: 1; pointer-events: auto; }
+
+/* ---------- Bilgi şeridi / özellikler ---------- */
+.feature-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.feature-item { text-align: center; padding: 18px; }
+.feature-item .ico { font-size: 26px; margin-bottom: 10px; }
+.feature-item h4 { font-family: var(--font-body); font-size: 14.5px; font-weight: 600; margin-bottom: 6px; }
+.feature-item p { font-size: 13px; }
+
+/* ---------- Footer ---------- */
+.site-footer { background: var(--ink); color: var(--cream-soft); padding: 64px 0 28px; margin-top: 60px; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; }
+.footer-grid h4 { font-family: var(--font-body); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px; color: var(--gold); }
+.footer-grid p, .footer-grid a { font-size: 13.5px; color: rgba(244,236,226,0.7); line-height: 2; }
+.footer-grid a:hover { color: var(--white); }
+.footer-bottom { margin-top: 48px; padding-top: 24px; border-top: 1px solid rgba(244,236,226,0.12); font-size: 12.5px; color: rgba(244,236,226,0.5); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: var(--white); padding: 14px 22px; border-radius: 999px;
+  font-size: 13.5px; z-index: 120; opacity: 0; pointer-events: none; transition: all .25s ease;
+  display: flex; align-items: center; gap: 8px;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------- Admin ortak ---------- */
+.admin-body { background: var(--cream-soft); min-height: 100vh; }
+.admin-shell { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+.admin-sidebar { background: var(--ink); color: var(--cream-soft); padding: 28px 20px; }
+.admin-sidebar .logo { color: var(--white); margin-bottom: 30px; display: block; }
+.admin-sidebar .logo span { color: var(--gold); }
+.admin-nav { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.admin-nav button {
+  width: 100%; text-align: left; background: none; border: none; color: rgba(244,236,226,0.75);
+  padding: 11px 14px; border-radius: 10px; font-size: 14px; transition: all .15s;
+}
+.admin-nav button:hover { background: rgba(255,255,255,0.06); color: var(--white); }
+.admin-nav button.active { background: var(--wine); color: var(--white); }
+.admin-main { padding: 34px 40px; }
+.admin-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+.admin-card { background: var(--white); border-radius: var(--radius-md); padding: 24px; box-shadow: var(--shadow-card); border: 1px solid var(--line); }
+.admin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 30px; }
+.stat-card { background: var(--white); border-radius: var(--radius-md); padding: 20px; border: 1px solid var(--line); }
+.stat-card .n { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--wine); }
+.stat-card .l { font-size: 12.5px; color: var(--taupe); text-transform: uppercase; letter-spacing: 0.06em; }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--taupe); padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.data-table td { padding: 12px; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: middle; }
+.data-table img { width: 44px; height: 56px; object-fit: cover; border-radius: 6px; }
+.table-actions { display: flex; gap: 8px; }
+.link-btn { background: none; border: none; font-size: 13px; color: var(--wine); text-decoration: underline; padding: 0; }
+.link-btn.danger { color: #A02525; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
+.form-field label { font-size: 12.5px; color: var(--ink-soft); font-weight: 500; }
+.form-field input, .form-field select, .form-field textarea {
+  padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px;
+}
+.form-field textarea { resize: vertical; min-height: 70px; }
+.form-span-2 { grid-column: span 2; }
+.login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--wine-deep); }
+.login-card { background: var(--white); border-radius: var(--radius-lg); padding: 44px; width: 380px; box-shadow: var(--shadow-soft); text-align: center; }
+.login-card h1 { font-size: 30px; margin-bottom: 6px; }
+.login-card p { margin-bottom: 24px; }
+.pill-badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 11px; }
+.pill-badge.ok { background: #E4F0E4; color: #2C6B2C; }
+.pill-badge.low { background: #FBEAD8; color: #A0611E; }
+.pill-badge.out { background: #F8E1E1; color: #A02525; }
+.export-box textarea { width: 100%; min-height: 260px; font-family: monospace; font-size: 12px; border-radius: 10px; border: 1px solid var(--line); padding: 14px; }
+.notice-banner { background: #FBEAD8; border: 1px solid #E7C79B; color: #7A4B1B; padding: 14px 18px; border-radius: 12px; font-size: 13.5px; margin-bottom: 24px; line-height: 1.6; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1020px) {
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+  .swatch-grid { grid-template-columns: repeat(2, 1fr); }
+  .admin-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .hero .inner { grid-template-columns: 1fr; }
+  .nav-links, .admin-sidebar { display: none; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .swatch-grid { grid-template-columns: 1fr 1fr; }
+  .modal-box { grid-template-columns: 1fr; }
+  .modal-img { aspect-ratio: 4/3; }
+  .admin-shell { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-span-2 { grid-column: span 1; }
+  .feature-strip { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .cart-drawer { width: 100vw; }
+}
+
+</style>
 </head>
 <body class="admin-body">
 
@@ -47,7 +409,7 @@
       <div class="notice-banner">
         Bu panel üzerinde yaptığınız değişiklikler yalnızca bu tarayıcıda saklanır (localStorage).
         Değişiklikleri sitenin tüm ziyaretçileri için kalıcı hale getirmek için <strong>"Yayınla / Dışa Aktar"</strong>
-        sekmesinden kodu kopyalayıp GitHub deponuzdaki <code>assets/js/data.js</code> dosyasına yapıştırıp push edin.
+        sekmesinden kodu kopyalayıp <code>index.html</code> ve <code>admin.html</code> içindeki <code>const NARIN_SEED = {...}</code> bloklarının yerine yapıştırıp push edin.
       </div>
       <div class="admin-grid">
         <div class="stat-card"><div class="n" id="statProducts">0</div><div class="l">Ürün</div></div>
@@ -155,9 +517,9 @@
       <div class="admin-topbar"><h2>Yayınla / Dışa Aktar</h2></div>
       <div class="notice-banner">
         Aşağıdaki kod, mevcut tüm ürün, kategori ve ayarlarınızı içerir. Bu kodu kopyalayıp
-        <code>assets/js/data.js</code> dosyasının en üstündeki <code>const NARIN_SEED = {...}</code>
-        bloğuyla değiştirin, ardından GitHub'a commit + push edin. Bu işlemden sonra değişiklikler
-        siteyi ziyaret eden <strong>herkes</strong> için kalıcı olur.
+        <code>index.html</code> ve <code>admin.html</code> dosyalarının içindeki <code>const NARIN_SEED = {...}</code>
+        bloklarının yerine yapıştırın (her iki dosyada da aynı bloğu değiştirin), ardından GitHub'a
+        commit + push edin. Bu işlemden sonra değişiklikler siteyi ziyaret eden <strong>herkes</strong> için kalıcı olur.
       </div>
       <div class="admin-card export-box">
         <textarea id="exportBox" readonly></textarea>
@@ -194,7 +556,504 @@
 
 <div class="toast" id="adminToast"></div>
 
-<script src="assets/js/data.js"></script>
-<script src="assets/js/admin.js"></script>
+<script>
+/* =========================================================
+   NARİN — Veri Katmanı
+   Bu dosya sitenin "kalıcı" varsayılan verisidir (kategoriler,
+   ürünler, marka ayarları). Admin panelinden yapılan değişiklikler
+   tarayıcının localStorage'ına yazılır ve SADECE o tarayıcıda görünür.
+   Değişiklikleri tüm ziyaretçiler için KALICI yapmak için:
+   Admin Paneli → "Kodu Dışa Aktar" → çıkan kodu bu dosyadaki
+   NARIN_SEED nesnesiyle değiştirip GitHub'a push edin.
+   ========================================================= */
+
+const NARIN_SEED = {
+  brand: {
+    name: "Narin",
+    tagline: "Her bedene nazik bir dokunuş",
+    about:
+      "Narin, 2026'da kuruldu; ipek, pamuk ve dantelin buluştuğu, kadın ve erkek iç giyiminde konforu öne çıkaran bir butik markadır. Her parça, günlük hayatın içinde fark edilmeden hissedilecek şekilde seçilir.",
+    whatsappNumber: "905551234567",
+    instagram: "narinicgiyim",
+    address: "Manavgat, Antalya",
+    phone: "0555 123 45 67",
+    email: "info@narinicgiyim.com",
+    heroImage: "https://picsum.photos/seed/narin-hero/1600/1000"
+  },
+
+  categories: [
+    {
+      id: "sutyen-takim",
+      name: "Sütyen & Takım",
+      description: "Günlük konfordan özel anlara, destekli ve dantelli takımlar.",
+      swatch: "https://picsum.photos/seed/narin-cat-1/500/500"
+    },
+    {
+      id: "kulot",
+      name: "Külot",
+      description: "Pamuklu, dantelli ve dikişsiz modeller; tüm bedenlerde.",
+      swatch: "https://picsum.photos/seed/narin-cat-2/500/500"
+    },
+    {
+      id: "gecelik-pijama",
+      name: "Gecelik & Pijama",
+      description: "Saten ve pamuklu kumaşlarla yumuşacık bir uyku hissi.",
+      swatch: "https://picsum.photos/seed/narin-cat-3/500/500"
+    },
+    {
+      id: "body-korse",
+      name: "Body & Korse",
+      description: "Şekillendirici ve sarmalayıcı, özel gün parçaları.",
+      swatch: "https://picsum.photos/seed/narin-cat-4/500/500"
+    },
+    {
+      id: "corap",
+      name: "Çorap & Külotlu Çorap",
+      description: "İnce dokulu, dayanıklı ve her kombine uyan renkler.",
+      swatch: "https://picsum.photos/seed/narin-cat-5/500/500"
+    },
+    {
+      id: "erkek",
+      name: "Erkek İç Giyim",
+      description: "Boxer, atlet ve slip; nefes alan kumaşlarla gün boyu konfor.",
+      swatch: "https://picsum.photos/seed/narin-cat-6/500/500"
+    }
+  ],
+
+  products: [
+    // Sütyen & Takım
+    { id: "p001", categoryId: "sutyen-takim", name: "Dantel Balenli Takım", price: 649, oldPrice: 799, sizes: ["75B","80B","80C","85C"], colors: ["Siyah","Bordo"], stock: 18, description: "İnce dantel dokulu, hafif destekli balen sütyen ve uyumlu külot takımı.", image: "https://picsum.photos/seed/narin-p1/700/900", featured: true },
+    { id: "p002", categoryId: "sutyen-takim", name: "Pamuklu Günlük Sütyen", price: 399, oldPrice: null, sizes: ["75B","80B","85B","90C"], colors: ["Ten","Beyaz","Siyah"], stock: 32, description: "Dikişsiz kalıp, yumuşak pamuklu kumaş, tüm gün rahat kullanım.", image: "https://picsum.photos/seed/narin-p2/700/900", featured: false },
+    { id: "p003", categoryId: "sutyen-takim", name: "Straplez Takım", price: 549, oldPrice: null, sizes: ["80B","85B","90C"], colors: ["Ten"], stock: 12, description: "Kayık yaka ve askısız kıyafetlerle uyumlu, kaymaz silikonlu.", image: "https://picsum.photos/seed/narin-p3/700/900", featured: false },
+
+    // Külot
+    { id: "p004", categoryId: "kulot", name: "Dikişsiz Bikini Külot (3'lü)", price: 349, oldPrice: 429, sizes: ["S","M","L","XL"], colors: ["Karışık"], stock: 40, description: "Lazer kesim, iz yapmayan, nefes alan mikrofiber kumaş.", image: "https://picsum.photos/seed/narin-p4/700/900", featured: true },
+    { id: "p005", categoryId: "kulot", name: "Dantel Brazilian Külot", price: 179, oldPrice: null, sizes: ["S","M","L"], colors: ["Siyah","Ekru"], stock: 25, description: "Yanları dantel detaylı, yumuşak pamuklu iç yüzey.", image: "https://picsum.photos/seed/narin-p5/700/900", featured: false },
+    { id: "p006", categoryId: "kulot", name: "Yüksek Bel Toparlayıcı Külot", price: 289, oldPrice: null, sizes: ["M","L","XL","XXL"], colors: ["Ten","Siyah"], stock: 20, description: "Hafif toparlayıcı doku, göbek üzerinden yüksek kesim.", image: "https://picsum.photos/seed/narin-p6/700/900", featured: false },
+
+    // Gecelik & Pijama
+    { id: "p007", categoryId: "gecelik-pijama", name: "Saten Askılı Gecelik", price: 459, oldPrice: 549, sizes: ["S","M","L"], colors: ["Bordo","Zümrüt","Siyah"], stock: 15, description: "Kayan dökümlü saten kumaş, ince askı detayı.", image: "https://picsum.photos/seed/narin-p7/700/900", featured: true },
+    { id: "p008", categoryId: "gecelik-pijama", name: "Pamuklu Pijama Takımı", price: 519, oldPrice: null, sizes: ["S","M","L","XL"], colors: ["Lila","Gri"], stock: 22, description: "Uzun kollu üst ve pantolon, %100 pamuklu.", image: "https://picsum.photos/seed/narin-p8/700/900", featured: false },
+    { id: "p009", categoryId: "gecelik-pijama", name: "Dantel Yakalı Sabahlık", price: 389, oldPrice: null, sizes: ["S/M","L/XL"], colors: ["Krem"], stock: 10, description: "Kuşaklı, dantel yaka detaylı, hafif kumaş.", image: "https://picsum.photos/seed/narin-p9/700/900", featured: false },
+
+    // Body & Korse
+    { id: "p010", categoryId: "body-korse", name: "Fitilli Body", price: 429, oldPrice: null, sizes: ["S","M","L"], colors: ["Siyah","Beyaz"], stock: 14, description: "Vücut hatlarını saran, çıtçıtlı alt kapama.", image: "https://picsum.photos/seed/narin-p10/700/900", featured: false },
+    { id: "p011", categoryId: "body-korse", name: "Şekillendirici Korse", price: 599, oldPrice: 699, sizes: ["M","L","XL"], colors: ["Ten"], stock: 9, description: "Kanca kapamalı, orta seviye sıkılık, özel gün altı için ideal.", image: "https://picsum.photos/seed/narin-p11/700/900", featured: true },
+
+    // Çorap
+    { id: "p012", categoryId: "corap", name: "İnce Külotlu Çorap 15 Den", price: 89, oldPrice: null, sizes: ["S/M","L/XL"], colors: ["Ten","Siyah"], stock: 60, description: "Şeffaf doku, günlük ve şık kombinler için.", image: "https://picsum.photos/seed/narin-p12/700/900", featured: false },
+    { id: "p013", categoryId: "corap", name: "Pamuklu Patik Çorap (5'li)", price: 149, oldPrice: null, sizes: ["36-40","40-44"], colors: ["Karışık"], stock: 45, description: "Görünmez model, terletmeyen pamuklu karışım.", image: "https://picsum.photos/seed/narin-p13/700/900", featured: false },
+
+    // Erkek
+    { id: "p014", categoryId: "erkek", name: "Pamuklu Boxer (3'lü Paket)", price: 399, oldPrice: 459, sizes: ["M","L","XL","XXL"], colors: ["Karışık"], stock: 30, description: "Likralı pamuk, rahat kesim, nefes alan kumaş.", image: "https://picsum.photos/seed/narin-p14/700/900", featured: true },
+    { id: "p015", categoryId: "erkek", name: "Ribana Atlet (2'li)", price: 259, oldPrice: null, sizes: ["M","L","XL"], colors: ["Beyaz","Siyah"], stock: 28, description: "Esnek ribana kumaş, günlük kullanım için ideal.", image: "https://picsum.photos/seed/narin-p15/700/900", featured: false },
+    { id: "p016", categoryId: "erkek", name: "Modal Slip (2'li)", price: 279, oldPrice: null, sizes: ["S","M","L"], colors: ["Lacivert","Gri"], stock: 20, description: "Yumuşak modal kumaş, dikişsiz bacak ucu.", image: "https://picsum.photos/seed/narin-p16/700/900", featured: false }
+  ]
+};
+
+/* ---------- Depolama yardımcıları ---------- */
+const NarinStore = {
+  KEYS: { products: "narin_products", categories: "narin_categories", brand: "narin_brand", cart: "narin_cart" },
+
+  _read(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (e) {
+      console.error("Narin depolama okuma hatası:", e);
+      return fallback;
+    }
+  },
+  _write(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (e) {
+      console.error("Narin depolama yazma hatası:", e);
+      return false;
+    }
+  },
+
+  getBrand() { return this._read(this.KEYS.brand, NARIN_SEED.brand); },
+  setBrand(b) { return this._write(this.KEYS.brand, b); },
+
+  getCategories() { return this._read(this.KEYS.categories, NARIN_SEED.categories); },
+  setCategories(c) { return this._write(this.KEYS.categories, c); },
+
+  getProducts() { return this._read(this.KEYS.products, NARIN_SEED.products); },
+  setProducts(p) { return this._write(this.KEYS.products, p); },
+
+  getCart() { return this._read(this.KEYS.cart, []); },
+  setCart(c) { return this._write(this.KEYS.cart, c); },
+
+  resetToDefaults() {
+    localStorage.removeItem(this.KEYS.products);
+    localStorage.removeItem(this.KEYS.categories);
+    localStorage.removeItem(this.KEYS.brand);
+  },
+
+  newId(prefix) {
+    return prefix + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  }
+};
+
+</script>
+<script>
+/* =========================================================
+   NARİN — Yönetim Paneli Mantığı
+   NOT: Bu statik bir site olduğu için parola koruması yalnızca
+   kazara erişimi engeller; gerçek bir güvenlik katmanı DEĞİLDİR
+   (kaynak kod herkese açıktır). Hassas veriler burada saklanmamalı.
+   ========================================================= */
+
+const ADMIN_PASS_KEY = "narin_admin_pass";
+const ADMIN_SESSION_KEY = "narin_admin_session";
+const DEFAULT_PASS = "narin2026";
+
+let A = {
+  categories: NarinStore.getCategories(),
+  products: NarinStore.getProducts(),
+  brand: NarinStore.getBrand(),
+  editingProductId: null,
+  editingCategoryId: null
+};
+
+/* ---------- Giriş ---------- */
+function getPass() { return localStorage.getItem(ADMIN_PASS_KEY) || DEFAULT_PASS; }
+function isLoggedIn() { return sessionStorage.getItem(ADMIN_SESSION_KEY) === "1"; }
+
+function tryLogin() {
+  const val = document.getElementById("loginPass").value;
+  const err = document.getElementById("loginError");
+  if (val === getPass()) {
+    sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
+    showAdmin();
+  } else {
+    err.textContent = "Parola hatalı. Tekrar deneyin.";
+  }
+}
+window.tryLogin = tryLogin;
+
+function logout() {
+  sessionStorage.removeItem(ADMIN_SESSION_KEY);
+  location.reload();
+}
+window.logout = logout;
+
+function showAdmin() {
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("adminShell").style.display = "grid";
+  renderAll();
+}
+
+/* ---------- Sekme değiştirme ---------- */
+function showTab(tab) {
+  document.querySelectorAll(".admin-tab").forEach(el => (el.style.display = "none"));
+  document.querySelectorAll(".admin-nav button").forEach(el => el.classList.remove("active"));
+  document.getElementById("tab-" + tab).style.display = "block";
+  document.getElementById("nav-" + tab).classList.add("active");
+  if (tab === "export") buildExport();
+}
+window.showTab = showTab;
+
+/* ---------- Dashboard ---------- */
+function renderDashboard() {
+  document.getElementById("statProducts").textContent = A.products.length;
+  document.getElementById("statCategories").textContent = A.categories.length;
+  const lowStock = A.products.filter(p => p.stock > 0 && p.stock <= 5).length;
+  const outStock = A.products.filter(p => p.stock === 0).length;
+  document.getElementById("statLowStock").textContent = lowStock;
+  document.getElementById("statOutStock").textContent = outStock;
+}
+
+/* ---------- Ürünler tablosu ---------- */
+function renderProductsTable() {
+  const catSelect = document.getElementById("prodCategory");
+  catSelect.innerHTML = A.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
+
+  const body = document.getElementById("productsTableBody");
+  body.innerHTML = A.products.map(p => {
+    const cat = A.categories.find(c => c.id === p.categoryId);
+    let stockPill = `<span class="pill-badge ok">Stokta (${p.stock})</span>`;
+    if (p.stock === 0) stockPill = `<span class="pill-badge out">Tükendi</span>`;
+    else if (p.stock <= 5) stockPill = `<span class="pill-badge low">Az kaldı (${p.stock})</span>`;
+    return `
+      <tr>
+        <td><img src="${p.image}" alt=""></td>
+        <td>${p.name}</td>
+        <td>${cat ? cat.name : "—"}</td>
+        <td>${p.price.toLocaleString("tr-TR")} ₺</td>
+        <td>${stockPill}</td>
+        <td class="table-actions">
+          <button class="link-btn" onclick="editProduct('${p.id}')">Düzenle</button>
+          <button class="link-btn danger" onclick="deleteProduct('${p.id}')">Sil</button>
+        </td>
+      </tr>`;
+  }).join("");
+}
+
+function resetProductForm() {
+  A.editingProductId = null;
+  document.getElementById("productForm").reset();
+  document.getElementById("productFormTitle").textContent = "Yeni Ürün Ekle";
+  document.getElementById("prodImagePreview").src = "";
+  document.getElementById("prodImagePreview").style.display = "none";
+}
+window.resetProductForm = resetProductForm;
+
+function editProduct(id) {
+  const p = A.products.find(x => x.id === id);
+  if (!p) return;
+  A.editingProductId = id;
+  document.getElementById("productFormTitle").textContent = "Ürünü Düzenle";
+  document.getElementById("prodName").value = p.name;
+  document.getElementById("prodCategory").value = p.categoryId;
+  document.getElementById("prodPrice").value = p.price;
+  document.getElementById("prodOldPrice").value = p.oldPrice || "";
+  document.getElementById("prodStock").value = p.stock;
+  document.getElementById("prodSizes").value = (p.sizes || []).join(", ");
+  document.getElementById("prodColors").value = (p.colors || []).join(", ");
+  document.getElementById("prodDescription").value = p.description || "";
+  document.getElementById("prodImageUrl").value = p.image || "";
+  document.getElementById("prodImagePreview").src = p.image || "";
+  document.getElementById("prodImagePreview").style.display = p.image ? "block" : "none";
+  document.getElementById("prodFeatured").checked = !!p.featured;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+window.editProduct = editProduct;
+
+function deleteProduct(id) {
+  if (!confirm("Bu ürünü silmek istediğinize emin misiniz?")) return;
+  A.products = A.products.filter(p => p.id !== id);
+  NarinStore.setProducts(A.products);
+  renderAll();
+}
+window.deleteProduct = deleteProduct;
+
+function saveProduct(e) {
+  e.preventDefault();
+  const data = {
+    name: document.getElementById("prodName").value.trim(),
+    categoryId: document.getElementById("prodCategory").value,
+    price: parseFloat(document.getElementById("prodPrice").value) || 0,
+    oldPrice: document.getElementById("prodOldPrice").value ? parseFloat(document.getElementById("prodOldPrice").value) : null,
+    stock: parseInt(document.getElementById("prodStock").value, 10) || 0,
+    sizes: document.getElementById("prodSizes").value.split(",").map(s => s.trim()).filter(Boolean),
+    colors: document.getElementById("prodColors").value.split(",").map(s => s.trim()).filter(Boolean),
+    description: document.getElementById("prodDescription").value.trim(),
+    image: document.getElementById("prodImageUrl").value.trim() || "https://picsum.photos/seed/" + Date.now() + "/700/900",
+    featured: document.getElementById("prodFeatured").checked
+  };
+
+  if (!data.name || !data.categoryId) {
+    alert("Lütfen ürün adı ve kategori seçin.");
+    return;
+  }
+
+  if (A.editingProductId) {
+    const idx = A.products.findIndex(p => p.id === A.editingProductId);
+    A.products[idx] = { ...A.products[idx], ...data };
+  } else {
+    A.products.push({ id: NarinStore.newId("p"), ...data });
+  }
+  NarinStore.setProducts(A.products);
+  resetProductForm();
+  renderAll();
+  showTab("products");
+  toastAdmin("Ürün kaydedildi");
+}
+window.saveProduct = saveProduct;
+
+function handleImageUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById("prodImageUrl").value = e.target.result;
+    document.getElementById("prodImagePreview").src = e.target.result;
+    document.getElementById("prodImagePreview").style.display = "block";
+  };
+  reader.readAsDataURL(file);
+}
+window.handleImageUpload = handleImageUpload;
+
+/* ---------- Kategoriler ---------- */
+function renderCategoriesTable() {
+  const body = document.getElementById("categoriesTableBody");
+  body.innerHTML = A.categories.map(c => {
+    const count = A.products.filter(p => p.categoryId === c.id).length;
+    return `
+      <tr>
+        <td><img src="${c.swatch}" alt=""></td>
+        <td>${c.name}</td>
+        <td>${c.description}</td>
+        <td>${count}</td>
+        <td class="table-actions">
+          <button class="link-btn" onclick="editCategory('${c.id}')">Düzenle</button>
+          <button class="link-btn danger" onclick="deleteCategory('${c.id}')">Sil</button>
+        </td>
+      </tr>`;
+  }).join("");
+}
+
+function resetCategoryForm() {
+  A.editingCategoryId = null;
+  document.getElementById("categoryForm").reset();
+  document.getElementById("categoryFormTitle").textContent = "Yeni Kategori Ekle";
+}
+window.resetCategoryForm = resetCategoryForm;
+
+function editCategory(id) {
+  const c = A.categories.find(x => x.id === id);
+  if (!c) return;
+  A.editingCategoryId = id;
+  document.getElementById("categoryFormTitle").textContent = "Kategoriyi Düzenle";
+  document.getElementById("catName").value = c.name;
+  document.getElementById("catDescription").value = c.description;
+  document.getElementById("catSwatch").value = c.swatch;
+}
+window.editCategory = editCategory;
+
+function deleteCategory(id) {
+  const inUse = A.products.some(p => p.categoryId === id);
+  if (inUse) {
+    alert("Bu kategoride ürünler var. Önce ürünleri başka kategoriye taşıyın veya silin.");
+    return;
+  }
+  if (!confirm("Bu kategoriyi silmek istediğinize emin misiniz?")) return;
+  A.categories = A.categories.filter(c => c.id !== id);
+  NarinStore.setCategories(A.categories);
+  renderAll();
+}
+window.deleteCategory = deleteCategory;
+
+function saveCategory(e) {
+  e.preventDefault();
+  const name = document.getElementById("catName").value.trim();
+  const description = document.getElementById("catDescription").value.trim();
+  const swatch = document.getElementById("catSwatch").value.trim() || "https://picsum.photos/seed/" + Date.now() + "/500/500";
+
+  if (!name) { alert("Lütfen kategori adı girin."); return; }
+
+  if (A.editingCategoryId) {
+    const idx = A.categories.findIndex(c => c.id === A.editingCategoryId);
+    A.categories[idx] = { ...A.categories[idx], name, description, swatch };
+  } else {
+    const id = name.toLowerCase().replace(/ç/g,"c").replace(/ğ/g,"g").replace(/ı/g,"i").replace(/ö/g,"o").replace(/ş/g,"s").replace(/ü/g,"u").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+    A.categories.push({ id: id || NarinStore.newId("cat"), name, description, swatch });
+  }
+  NarinStore.setCategories(A.categories);
+  resetCategoryForm();
+  renderAll();
+  toastAdmin("Kategori kaydedildi");
+}
+window.saveCategory = saveCategory;
+
+/* ---------- Marka / Ayarlar ---------- */
+function fillSettingsForm() {
+  document.getElementById("setName").value = A.brand.name;
+  document.getElementById("setTagline").value = A.brand.tagline;
+  document.getElementById("setAbout").value = A.brand.about;
+  document.getElementById("setWhatsapp").value = A.brand.whatsappNumber;
+  document.getElementById("setInstagram").value = A.brand.instagram;
+  document.getElementById("setAddress").value = A.brand.address;
+  document.getElementById("setPhone").value = A.brand.phone;
+  document.getElementById("setEmail").value = A.brand.email;
+  document.getElementById("setHeroImage").value = A.brand.heroImage;
+}
+
+function saveSettings(e) {
+  e.preventDefault();
+  A.brand = {
+    name: document.getElementById("setName").value.trim(),
+    tagline: document.getElementById("setTagline").value.trim(),
+    about: document.getElementById("setAbout").value.trim(),
+    whatsappNumber: document.getElementById("setWhatsapp").value.trim().replace(/[^0-9]/g, ""),
+    instagram: document.getElementById("setInstagram").value.trim(),
+    address: document.getElementById("setAddress").value.trim(),
+    phone: document.getElementById("setPhone").value.trim(),
+    email: document.getElementById("setEmail").value.trim(),
+    heroImage: document.getElementById("setHeroImage").value.trim()
+  };
+  NarinStore.setBrand(A.brand);
+  toastAdmin("Ayarlar kaydedildi");
+}
+window.saveSettings = saveSettings;
+
+function changePassword(e) {
+  e.preventDefault();
+  const current = document.getElementById("curPass").value;
+  const next = document.getElementById("newPass").value;
+  if (current !== getPass()) { alert("Mevcut parola yanlış."); return; }
+  if (next.length < 4) { alert("Yeni parola en az 4 karakter olmalı."); return; }
+  localStorage.setItem(ADMIN_PASS_KEY, next);
+  document.getElementById("passwordForm").reset();
+  toastAdmin("Parola güncellendi");
+}
+window.changePassword = changePassword;
+
+/* ---------- Dışa aktarma (kalıcı yayın için) ---------- */
+function buildExport() {
+  const seed = {
+    brand: A.brand,
+    categories: A.categories,
+    products: A.products
+  };
+  const code = `const NARIN_SEED = ${JSON.stringify(seed, null, 2)};`;
+  document.getElementById("exportBox").value = code;
+}
+
+function copyExport() {
+  const box = document.getElementById("exportBox");
+  box.select();
+  document.execCommand("copy");
+  toastAdmin("Kod kopyalandı");
+}
+window.copyExport = copyExport;
+
+function downloadExport() {
+  const blob = new Blob([document.getElementById("exportBox").value], { type: "text/javascript" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "data-export.js";
+  a.click();
+}
+window.downloadExport = downloadExport;
+
+function resetAllData() {
+  if (!confirm("Tüm ürün, kategori ve ayar değişiklikleriniz silinip site varsayılanlarına dönecek. Emin misiniz?")) return;
+  NarinStore.resetToDefaults();
+  location.reload();
+}
+window.resetAllData = resetAllData;
+
+/* ---------- Yardımcılar ---------- */
+function toastAdmin(msg) {
+  const el = document.getElementById("adminToast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove("show"), 2200);
+}
+
+function renderAll() {
+  A.categories = NarinStore.getCategories();
+  A.products = NarinStore.getProducts();
+  A.brand = NarinStore.getBrand();
+  renderDashboard();
+  renderProductsTable();
+  renderCategoriesTable();
+  fillSettingsForm();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (isLoggedIn()) showAdmin();
+  document.getElementById("productForm").addEventListener("submit", saveProduct);
+  document.getElementById("categoryForm").addEventListener("submit", saveCategory);
+  document.getElementById("settingsForm").addEventListener("submit", saveSettings);
+  document.getElementById("passwordForm").addEventListener("submit", changePassword);
+});
+
+</script>
 </body>
 </html>

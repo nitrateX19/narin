@@ -8,22 +8,24 @@ Yönetim panelinden ürün/kategori ekleme-düzenleme-silme yapılabilir.
 
 ```
 narin/
-├── index.html          → mağaza (ana site)
-├── admin.html           → yönetim paneli
-├── assets/
-│   ├── css/style.css
-│   └── js/
-│       ├── data.js      → kategoriler, ürünler, marka ayarları (varsayılan veri)
-│       ├── app.js        → mağaza mantığı (sepet, filtre, WhatsApp sipariş)
-│       └── admin.js      → yönetim paneli mantığı
+├── index.html    → mağaza (ana site) — CSS ve JS dosya içine gömülüdür
+├── admin.html    → yönetim paneli — CSS ve JS dosya içine gömülüdür
 └── README.md
 ```
 
+**Sadece 2 dosya var** (`index.html` ve `admin.html`). Önceki sürümde ayrı `assets/css` ve
+`assets/js` klasörleri vardı; GitHub'a dosya yüklerken bu alt klasörlerin bozulup site
+stilinin/işlevinin çalışmaması riskine karşı tüm CSS ve JavaScript artık her iki HTML
+dosyasının içine gömülüdür. Yükleme sırasında hiçbir klasör yapısı kaybolamaz.
+
 ## GitHub Pages'e yayınlama
 
-1. Bu klasörün içeriğini bir GitHub deposuna yükleyin (kök dizine, ya da `docs/` klasörüne).
-2. Depo **Settings → Pages** bölümünden yayın kaynağını seçin (`main` dalı / kök veya `docs`).
+1. `index.html` ve `admin.html` dosyalarını bir GitHub deposunun **kök dizinine** yükleyin
+   (alt klasör oluşturmayın — ikisi de repo'nun ana sayfasında görünmeli).
+2. Depo **Settings → Pages** bölümünden yayın kaynağını seçin (`main` dalı / kök `/`).
 3. Birkaç dakika içinde siteniz `https://kullaniciadi.github.io/depo-adi/` adresinde yayında olacaktır.
+4. Sayfa yine bozuk görünüyorsa: tarayıcıda **Ctrl+Shift+R** (sert yenileme) yapıp önbelleği
+   temizleyin, ve adres çubuğunda tam URL'nin sonunda `/` olduğundan emin olun.
 
 ## Yönetim paneli — ÖNEMLİ çalışma mantığı
 
@@ -36,9 +38,11 @@ Değişiklikleri **herkes için kalıcı** yapmak için:
 
 1. Yönetim panelinde **"Yayınla / Dışa Aktar"** sekmesine gidin.
 2. **"Kodu Kopyala"** butonuna basın.
-3. `assets/js/data.js` dosyasının en üstündeki `const NARIN_SEED = {...}` bloğunu
-   kopyaladığınız kodla değiştirin.
-4. Değişikliği GitHub'a `git commit` + `git push` ile gönderin.
+3. Hem `index.html` hem `admin.html` dosyalarını açıp, içlerindeki
+   `const NARIN_SEED = {...}` bloğunu (dosyanın en üstünde, ilk `<script>` etiketinin
+   içinde) kopyaladığınız kodla değiştirin — **iki dosyada da aynı değişikliği yapın**.
+4. Değişikliği GitHub'a `git commit` + `git push` ile gönderin (ya da GitHub web
+   arayüzünden dosyayı düzenleyip doğrudan commit edin).
 5. GitHub Pages birkaç dakika içinde güncel siteyi yayınlar.
 
 Varsayılan admin parolası: **narin2026** (Yönetim Paneli → Parola sekmesinden değiştirin).
