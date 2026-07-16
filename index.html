@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Narin — Her bedene nazik bir dokunuş</title>
+<meta name="description" content="Narin İç Giyim — sütyen, külot, gecelik, body, çorap ve erkek iç giyiminde konforu önceleyen butik marka.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="inner">
+    <a href="#top" class="logo">Narin<span>.</span></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#kategoriler">Kategoriler</a></li>
+        <li><a href="#urunler">Ürünler</a></li>
+        <li><a href="#hakkimizda">Hakkımızda</a></li>
+        <li><a href="#iletisim">İletişim</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a class="icon-btn" href="admin.html" title="Yönetim Paneli" aria-label="Yönetim Paneli">⚙</a>
+      <button class="icon-btn" onclick="openCart()" aria-label="Sepeti aç">
+        🛍 <span class="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="inner">
+      <div class="hero-copy">
+        <span class="eyebrow" data-brand-tagline>Her bedene nazik bir dokunuş</span>
+        <h1>Cildinizin<br>hatırladığı<br>kumaşlar.</h1>
+        <p data-brand-about>Narin, ipek, pamuk ve dantelin buluştuğu, kadın ve erkek iç giyiminde konforu öne çıkaran bir butik markadır.</p>
+        <div class="hero-actions">
+          <a href="#urunler" class="btn btn-primary">Koleksiyonu Keşfet</a>
+          <a href="#kategoriler" class="btn btn-outline">Kategorilere Göz At</a>
+        </div>
+      </div>
+      <div class="hero-figure">
+        <img id="heroImage" src="" alt="Narin koleksiyonu">
+        <span class="hero-tag">Yeni Sezon · El Seçkisi</span>
+      </div>
+    </div>
+    <svg class="drape-divider" viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path d="M0,40 C240,90 480,0 720,30 C960,60 1200,10 1440,40 L1440,80 L0,80 Z" fill="#EFE4D6"></path>
+    </svg>
+  </section>
+
+  <!-- KATEGORİLER -->
+  <section class="section" id="kategoriler" style="padding-top:0;">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Numuneler</span>
+        <h2>Kategoriye göre keşfedin</h2>
+        <p>Her kategori, elde tutulmuş bir kumaş numunesi gibi — dokusunu ve karakterini önce siz hissedin.</p>
+      </div>
+      <div class="swatch-grid" id="categoryGrid"></div>
+    </div>
+  </section>
+
+  <!-- ÜRÜNLER -->
+  <section class="section" id="urunler" style="background:var(--cream-soft);">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Katalog</span>
+        <h2>Tüm ürünler</h2>
+        <p>Beden ve renk seçeneklerini ürün kartına tıklayarak inceleyebilirsiniz.</p>
+      </div>
+      <div class="filter-bar" id="filterBar"></div>
+      <div class="product-grid" id="productGrid"></div>
+    </div>
+  </section>
+
+  <!-- ÖZELLİKLER -->
+  <section class="section">
+    <div class="container">
+      <div class="feature-strip">
+        <div class="feature-item"><div class="ico">🧵</div><h4>Özenle Seçilmiş Kumaş</h4><p>Cilt dostu, nefes alan kumaşlar.</p></div>
+        <div class="feature-item"><div class="ico">📦</div><h4>Özenli Paketleme</h4><p>Her siparişte hediye paketi hissi.</p></div>
+        <div class="feature-item"><div class="ico">💬</div><h4>WhatsApp'tan Sipariş</h4><p>Tek tıkla sipariş, hızlı yanıt.</p></div>
+        <div class="feature-item"><div class="ico">↺</div><h4>Kolay Değişim</h4><p>Beden uymazsa 7 gün içinde değişim.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HAKKIMIZDA -->
+  <section class="section" id="hakkimizda">
+    <div class="container" style="max-width:760px; text-align:center;">
+      <span class="eyebrow">Hikayemiz</span>
+      <h2 style="margin-top:10px;">Narin kimdir?</h2>
+      <p style="margin-top:18px; font-size:17px;" data-brand-about>Narin, ipek, pamuk ve dantelin buluştuğu, kadın ve erkek iç giyiminde konforu öne çıkaran bir butik markadır.</p>
+    </div>
+  </section>
+</main>
+
+<!-- ÜRÜN DETAY MODALI -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+
+<!-- SEPET ÇEKMECESİ -->
+<div class="overlay-dim" id="overlayDim"></div>
+<aside class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3>Sepetim</h3>
+    <button class="modal-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Toplam</span><span id="cartTotal">0 ₺</span></div>
+    <div class="checkout-form">
+      <input type="text" id="custName" placeholder="Ad Soyad">
+      <input type="tel" id="custPhone" placeholder="Telefon">
+      <input type="text" id="custAddress" placeholder="Teslimat Adresi">
+      <textarea id="custNote" placeholder="Sipariş notu (beden/renk teyidi vb.) — opsiyonel"></textarea>
+    </div>
+    <button class="btn btn-gold btn-block" onclick="sendOrderToWhatsapp()">WhatsApp'tan Sipariş Ver</button>
+  </div>
+</aside>
+
+<footer class="site-footer" id="iletisim">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="color:var(--white); margin-bottom:14px;">Narin<span>.</span></div>
+        <p data-brand-about>Kadın ve erkek iç giyiminde konfor odaklı butik marka.</p>
+      </div>
+      <div>
+        <h4>Kategoriler</h4>
+        <p><a href="#urunler">Sütyen &amp; Takım</a></p>
+        <p><a href="#urunler">Gecelik &amp; Pijama</a></p>
+        <p><a href="#urunler">Erkek İç Giyim</a></p>
+      </div>
+      <div>
+        <h4>İletişim</h4>
+        <p data-brand-address>Manavgat, Antalya</p>
+        <p data-brand-phone>0555 123 45 67</p>
+        <p data-brand-email>info@narinicgiyim.com</p>
+      </div>
+      <div>
+        <h4>Takip Edin</h4>
+        <p><a href="#" data-brand-instagram>@narinicgiyim</a></p>
+        <p><a href="admin.html">Yönetim Paneli</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Narin. Tüm hakları saklıdır.</span>
+      <span>Siparişler WhatsApp üzerinden alınır.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

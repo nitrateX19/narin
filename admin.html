@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Narin — Yönetim Paneli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="admin-body">
+
+<!-- GİRİŞ EKRANI -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <h1>Narin<span style="color:var(--gold);">.</span></h1>
+    <p>Yönetim paneline erişmek için parolayı girin.<br><small>Varsayılan parola: <strong>narin2026</strong></small></p>
+    <input type="password" id="loginPass" placeholder="Parola" style="width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);margin-bottom:12px;font-family:inherit;" onkeydown="if(event.key==='Enter')tryLogin()">
+    <button class="btn btn-primary btn-block" onclick="tryLogin()">Giriş Yap</button>
+    <p id="loginError" style="color:#A02525;margin-top:12px;font-size:13px;"></p>
+    <p style="margin-top:18px;"><a href="index.html" style="font-size:13px;text-decoration:underline;color:var(--taupe);">← Mağazaya dön</a></p>
+  </div>
+</div>
+
+<!-- YÖNETİM PANELİ -->
+<div class="admin-shell" id="adminShell" style="display:none;">
+  <aside class="admin-sidebar">
+    <a href="index.html" class="logo">Narin<span>.</span></a>
+    <ul class="admin-nav">
+      <li><button id="nav-dashboard" class="active" onclick="showTab('dashboard')">📊 Genel Bakış</button></li>
+      <li><button id="nav-products" onclick="showTab('products')">🧺 Ürünler</button></li>
+      <li><button id="nav-categories" onclick="showTab('categories')">🗂 Kategoriler</button></li>
+      <li><button id="nav-settings" onclick="showTab('settings')">⚙ Marka Ayarları</button></li>
+      <li><button id="nav-export" onclick="showTab('export')">⬆ Yayınla / Dışa Aktar</button></li>
+      <li><button id="nav-security" onclick="showTab('security')">🔒 Parola</button></li>
+    </ul>
+    <div style="margin-top:40px;">
+      <button class="btn btn-outline btn-sm btn-block" style="border-color:rgba(244,236,226,0.3); color:var(--cream-soft);" onclick="logout()">Çıkış Yap</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+
+    <!-- GENEL BAKIŞ -->
+    <section class="admin-tab" id="tab-dashboard">
+      <div class="admin-topbar"><h2>Genel Bakış</h2></div>
+      <div class="notice-banner">
+        Bu panel üzerinde yaptığınız değişiklikler yalnızca bu tarayıcıda saklanır (localStorage).
+        Değişiklikleri sitenin tüm ziyaretçileri için kalıcı hale getirmek için <strong>"Yayınla / Dışa Aktar"</strong>
+        sekmesinden kodu kopyalayıp GitHub deponuzdaki <code>assets/js/data.js</code> dosyasına yapıştırıp push edin.
+      </div>
+      <div class="admin-grid">
+        <div class="stat-card"><div class="n" id="statProducts">0</div><div class="l">Ürün</div></div>
+        <div class="stat-card"><div class="n" id="statCategories">0</div><div class="l">Kategori</div></div>
+        <div class="stat-card"><div class="n" id="statLowStock">0</div><div class="l">Azalan Stok</div></div>
+        <div class="stat-card"><div class="n" id="statOutStock">0</div><div class="l">Tükenen</div></div>
+      </div>
+      <div class="admin-card">
+        <h3 style="margin-bottom:14px;">Hızlı Başlangıç</h3>
+        <p>• "Ürünler" sekmesinden yeni ürün ekleyin veya mevcut ürünleri düzenleyin.<br>
+        • "Kategoriler" sekmesinden koleksiyon başlıklarını yönetin.<br>
+        • "Marka Ayarları"ndan WhatsApp sipariş numaranızı ve mağaza bilgilerinizi güncelleyin.<br>
+        • Değişiklikleri kalıcı yapmak için "Yayınla / Dışa Aktar" adımını unutmayın.</p>
+      </div>
+    </section>
+
+    <!-- ÜRÜNLER -->
+    <section class="admin-tab" id="tab-products" style="display:none;">
+      <div class="admin-topbar"><h2>Ürünler</h2></div>
+
+      <div class="admin-card" style="margin-bottom:24px;">
+        <h3 id="productFormTitle" style="margin-bottom:16px;">Yeni Ürün Ekle</h3>
+        <form id="productForm">
+          <div class="form-grid">
+            <div class="form-field"><label>Ürün Adı</label><input type="text" id="prodName" required></div>
+            <div class="form-field"><label>Kategori</label><select id="prodCategory"></select></div>
+            <div class="form-field"><label>Fiyat (₺)</label><input type="number" id="prodPrice" min="0" step="0.01" required></div>
+            <div class="form-field"><label>Eski Fiyat (opsiyonel, indirim için)</label><input type="number" id="prodOldPrice" min="0" step="0.01"></div>
+            <div class="form-field"><label>Stok Adedi</label><input type="number" id="prodStock" min="0" required></div>
+            <div class="form-field"><label>Bedenler (virgülle ayırın)</label><input type="text" id="prodSizes" placeholder="S, M, L, XL"></div>
+            <div class="form-field"><label>Renkler (virgülle ayırın)</label><input type="text" id="prodColors" placeholder="Siyah, Ekru"></div>
+            <div class="form-field"><label><input type="checkbox" id="prodFeatured"> Öne çıkan ürün</label></div>
+            <div class="form-field form-span-2"><label>Açıklama</label><textarea id="prodDescription"></textarea></div>
+            <div class="form-field"><label>Görsel URL</label><input type="text" id="prodImageUrl" placeholder="https://..."></div>
+            <div class="form-field"><label>veya Bilgisayardan Yükle</label><input type="file" accept="image/*" onchange="handleImageUpload(this)"></div>
+            <div class="form-field form-span-2"><img id="prodImagePreview" src="" alt="" style="display:none;width:100px;height:130px;object-fit:cover;border-radius:8px;"></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:16px;">
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+            <button type="button" class="btn btn-outline" onclick="resetProductForm()">Formu Temizle</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <h3 style="margin-bottom:16px;">Ürün Listesi</h3>
+        <table class="data-table">
+          <thead><tr><th>Görsel</th><th>Ad</th><th>Kategori</th><th>Fiyat</th><th>Stok</th><th>İşlem</th></tr></thead>
+          <tbody id="productsTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- KATEGORİLER -->
+    <section class="admin-tab" id="tab-categories" style="display:none;">
+      <div class="admin-topbar"><h2>Kategoriler</h2></div>
+
+      <div class="admin-card" style="margin-bottom:24px;">
+        <h3 id="categoryFormTitle" style="margin-bottom:16px;">Yeni Kategori Ekle</h3>
+        <form id="categoryForm">
+          <div class="form-grid">
+            <div class="form-field"><label>Kategori Adı</label><input type="text" id="catName" required></div>
+            <div class="form-field"><label>Görsel URL</label><input type="text" id="catSwatch" placeholder="https://..."></div>
+            <div class="form-field form-span-2"><label>Açıklama</label><textarea id="catDescription"></textarea></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:16px;">
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+            <button type="button" class="btn btn-outline" onclick="resetCategoryForm()">Formu Temizle</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <h3 style="margin-bottom:16px;">Kategori Listesi</h3>
+        <table class="data-table">
+          <thead><tr><th>Görsel</th><th>Ad</th><th>Açıklama</th><th>Ürün Sayısı</th><th>İşlem</th></tr></thead>
+          <tbody id="categoriesTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- MARKA AYARLARI -->
+    <section class="admin-tab" id="tab-settings" style="display:none;">
+      <div class="admin-topbar"><h2>Marka Ayarları</h2></div>
+      <div class="admin-card">
+        <form id="settingsForm">
+          <div class="form-grid">
+            <div class="form-field"><label>Marka Adı</label><input type="text" id="setName" required></div>
+            <div class="form-field"><label>Slogan</label><input type="text" id="setTagline"></div>
+            <div class="form-field form-span-2"><label>Hakkımızda Metni</label><textarea id="setAbout"></textarea></div>
+            <div class="form-field"><label>WhatsApp Numarası (ülke kodu ile, örn. 905551234567)</label><input type="text" id="setWhatsapp" required></div>
+            <div class="form-field"><label>Instagram Kullanıcı Adı</label><input type="text" id="setInstagram"></div>
+            <div class="form-field"><label>Adres</label><input type="text" id="setAddress"></div>
+            <div class="form-field"><label>Telefon</label><input type="text" id="setPhone"></div>
+            <div class="form-field"><label>E-posta</label><input type="email" id="setEmail"></div>
+            <div class="form-field form-span-2"><label>Ana Sayfa Görsel URL</label><input type="text" id="setHeroImage"></div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top:16px;">Ayarları Kaydet</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- YAYINLA / DIŞA AKTAR -->
+    <section class="admin-tab" id="tab-export" style="display:none;">
+      <div class="admin-topbar"><h2>Yayınla / Dışa Aktar</h2></div>
+      <div class="notice-banner">
+        Aşağıdaki kod, mevcut tüm ürün, kategori ve ayarlarınızı içerir. Bu kodu kopyalayıp
+        <code>assets/js/data.js</code> dosyasının en üstündeki <code>const NARIN_SEED = {...}</code>
+        bloğuyla değiştirin, ardından GitHub'a commit + push edin. Bu işlemden sonra değişiklikler
+        siteyi ziyaret eden <strong>herkes</strong> için kalıcı olur.
+      </div>
+      <div class="admin-card export-box">
+        <textarea id="exportBox" readonly></textarea>
+        <div style="display:flex;gap:10px;margin-top:14px;">
+          <button class="btn btn-primary" onclick="copyExport()">Kodu Kopyala</button>
+          <button class="btn btn-outline" onclick="downloadExport()">.js Olarak İndir</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAROLA -->
+    <section class="admin-tab" id="tab-security" style="display:none;">
+      <div class="admin-topbar"><h2>Parola</h2></div>
+      <div class="notice-banner">
+        Bu parola koruması sadece kazara erişimi engeller — statik sitelerde gerçek bir güvenlik
+        katmanı sağlamaz, çünkü site kodu herkese açıktır. Hassas hiçbir veriyi bu panelde saklamayın.
+      </div>
+      <div class="admin-card" style="max-width:420px;">
+        <form id="passwordForm">
+          <div class="form-field"><label>Mevcut Parola</label><input type="password" id="curPass" required></div>
+          <div class="form-field"><label>Yeni Parola</label><input type="password" id="newPass" required></div>
+          <button type="submit" class="btn btn-primary" style="margin-top:10px;">Parolayı Güncelle</button>
+        </form>
+      </div>
+      <div class="admin-card" style="max-width:420px;margin-top:20px;">
+        <h3 style="margin-bottom:10px;">Verileri Sıfırla</h3>
+        <p style="margin-bottom:14px;">Bu tarayıcıda yaptığınız tüm değişiklikleri silip site varsayılanlarına döner.</p>
+        <button class="btn btn-outline" style="border-color:#A02525;color:#A02525;" onclick="resetAllData()">Varsayılanlara Sıfırla</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="adminToast"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>
