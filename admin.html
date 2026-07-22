@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Yönetim Paneli | Nakış & Nine</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/admin.css" />
+</head>
+<body>
+
+<!-- ========== GİRİŞ EKRANI ========== -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="mark">N&N</div>
+    <h1>Yönetim Paneli</h1>
+    <p class="sub">Kategori, ürün ve mağaza bilgilerini buradan yönetin.</p>
+    <div class="login-error" id="loginError">Kullanıcı adı veya şifre hatalı.</div>
+    <form id="loginForm">
+      <div class="form-field">
+        <label for="loginUser">Kullanıcı adı</label>
+        <input type="text" id="loginUser" autocomplete="username" required />
+      </div>
+      <div class="form-field">
+        <label for="loginPass">Şifre</label>
+        <input type="text" id="loginPass" autocomplete="current-password" required />
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Giriş Yap</button>
+    </form>
+    <div class="login-hint">Varsayılan: <strong>admin</strong> / <strong>manavgat2026</strong><br/>Şifreyi "Ayarlar" bölümünden değiştirebilirsiniz.</div>
+  </div>
+</div>
+
+<!-- ========== ADMIN GÖVDESİ ========== -->
+<div class="admin-shell" id="adminShell" style="display:none;">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span class="mark">N&N</span>
+      <span class="label">Yönetim Paneli<small>Nakış & Nine</small></span>
+    </div>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <button data-view="dashboard" class="is-active"><span class="icon">◆</span> Genel Bakış</button>
+      <button data-view="categories"><span class="icon">▤</span> Kategoriler</button>
+      <button data-view="products"><span class="icon">⚬</span> Ürünler</button>
+      <button data-view="settings"><span class="icon">⚙</span> Mağaza Ayarları</button>
+      <button data-view="backup"><span class="icon">⇅</span> Yedekle / Geri Yükle</button>
+    </nav>
+    <div class="sidebar-foot">
+      <a href="index.html" target="_blank">↗ Siteyi Görüntüle</a>
+      <button id="logoutBtn">Çıkış Yap</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="main-head">
+      <div>
+        <h2 id="viewTitle">Genel Bakış</h2>
+        <p id="viewSub">Mağazanızın anlık durumu</p>
+      </div>
+    </div>
+
+    <!-- ---------- Genel Bakış ---------- -->
+    <section class="view is-active" id="view-dashboard">
+      <div class="stat-row">
+        <div class="stat-card"><div class="num" id="statCatCount">0</div><div class="label">KATEGORİ</div></div>
+        <div class="stat-card"><div class="num" id="statProductCount">0</div><div class="label">ÜRÜN</div></div>
+        <div class="stat-card"><div class="num" id="statInStock">0</div><div class="label">STOKTA</div></div>
+        <div class="stat-card"><div class="num" id="statOutStock">0</div><div class="label">TÜKENDİ</div></div>
+      </div>
+      <div class="panel">
+        <h3>Hızlı Başlangıç</h3>
+        <p class="panel-desc">Yeni bir tuhafiye mağazası mısınız? Şu sırayla ilerleyin:</p>
+        <ol style="color:var(--ink-soft);font-size:0.9rem;line-height:1.9;padding-left:18px;margin:0;">
+          <li><strong>Mağaza Ayarları</strong>'ndan isim, telefon, WhatsApp ve adres bilgilerinizi girin.</li>
+          <li><strong>Kategoriler</strong>'den ürün gruplarınızı oluşturun (İç Giyim, Tuhafiye, Dikiş vb.)</li>
+          <li><strong>Ürünler</strong>'den her ürünü fotoğrafıyla birlikte ekleyin.</li>
+          <li>Değişiklikleriniz anında <a href="index.html" target="_blank" style="color:var(--rose);">canlı sitede</a> görünür.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ---------- Kategoriler ---------- -->
+    <section class="view" id="view-categories">
+      <div class="panel">
+        <h3 id="catFormTitle">Yeni Kategori Ekle</h3>
+        <p class="panel-desc">Ürünlerinizi gruplamak için kategoriler oluşturun. Görsel eklemek isteğe bağlıdır.</p>
+        <form id="catForm">
+          <input type="hidden" id="catId" />
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="catName">Kategori adı *</label>
+              <input type="text" id="catName" placeholder="Örn: İç Giyim" required />
+            </div>
+            <div class="form-field">
+              <label for="catDesc">Kısa açıklama</label>
+              <input type="text" id="catDesc" placeholder="Örn: Sütyen, külot, gecelik" />
+            </div>
+          </div>
+          <div class="form-field full">
+            <label>Kategori görseli</label>
+            <div class="upload-box">
+              <div class="upload-preview" id="catImgPreview">Görsel yok</div>
+              <div class="upload-actions">
+                <input type="file" id="catImgInput" accept="image/*" />
+                <button type="button" class="btn btn-outline btn-sm" id="catImgClear">Görseli kaldır</button>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button type="submit" class="btn btn-primary" id="catSubmitBtn">Kategoriyi Kaydet</button>
+            <button type="button" class="btn btn-outline" id="catCancelBtn" style="display:none;">Vazgeç</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h3>Kategori Listesi</h3>
+        <p class="panel-desc">Sıralama, sitede görünme sırasıdır.</p>
+        <table>
+          <thead><tr><th>Görsel</th><th>Ad</th><th>Açıklama</th><th>Ürün Sayısı</th><th></th></tr></thead>
+          <tbody id="catTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---------- Ürünler ---------- -->
+    <section class="view" id="view-products">
+      <div class="panel">
+        <h3 id="prodFormTitle">Yeni Ürün Ekle</h3>
+        <p class="panel-desc">Ürün fotoğrafı yükleyin, fiyat ve stok bilgisini girin.</p>
+        <form id="prodForm">
+          <input type="hidden" id="prodId" />
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="prodName">Ürün adı *</label>
+              <input type="text" id="prodName" placeholder="Örn: Pamuklu Rahat Sütyen" required />
+            </div>
+            <div class="form-field">
+              <label for="prodCategory">Kategori *</label>
+              <select id="prodCategory" required></select>
+            </div>
+            <div class="form-field">
+              <label for="prodPrice">Satış fiyatı (₺) *</label>
+              <input type="number" id="prodPrice" min="0" step="0.5" required />
+            </div>
+            <div class="form-field">
+              <label for="prodOldPrice">Eski fiyat (₺) <span class="hint">indirim için, boş bırakılabilir</span></label>
+              <input type="number" id="prodOldPrice" min="0" step="0.5" />
+            </div>
+            <div class="form-field">
+              <label for="prodBadge">Etiket</label>
+              <select id="prodBadge">
+                <option value="">Yok</option>
+                <option value="Yeni">Yeni</option>
+                <option value="İndirim">İndirim</option>
+                <option value="Çok Satan">Çok Satan</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="prodStock">Stok durumu</label>
+              <div class="check-field" style="padding-top:8px;">
+                <input type="checkbox" id="prodStock" checked style="width:auto;" />
+                <label for="prodStock" style="font-weight:400;">Stokta var</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-field full">
+            <label for="prodDesc">Açıklama</label>
+            <textarea id="prodDesc" placeholder="Ürünün kumaşı, kalıbı, kullanım alanı vb."></textarea>
+          </div>
+          <div class="form-field full">
+            <label>Ürün görseli</label>
+            <div class="upload-box">
+              <div class="upload-preview" id="prodImgPreview">Görsel yok</div>
+              <div class="upload-actions">
+                <input type="file" id="prodImgInput" accept="image/*" />
+                <button type="button" class="btn btn-outline btn-sm" id="prodImgClear">Görseli kaldır</button>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button type="submit" class="btn btn-primary" id="prodSubmitBtn">Ürünü Kaydet</button>
+            <button type="button" class="btn btn-outline" id="prodCancelBtn" style="display:none;">Vazgeç</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h3>Ürün Listesi</h3>
+        <div class="form-field" style="max-width:280px;">
+          <input type="text" id="prodSearch" placeholder="Ürün ara..." />
+        </div>
+        <table>
+          <thead><tr><th>Görsel</th><th>Ad</th><th>Kategori</th><th>Fiyat</th><th>Stok</th><th></th></tr></thead>
+          <tbody id="prodTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---------- Ayarlar ---------- -->
+    <section class="view" id="view-settings">
+      <div class="panel">
+        <h3>Mağaza Bilgileri</h3>
+        <p class="panel-desc">Bu bilgiler sitenin her yerinde (header, footer, WhatsApp linki) kullanılır.</p>
+        <form id="settingsForm">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="setStoreName">Mağaza adı</label>
+              <input type="text" id="setStoreName" />
+            </div>
+            <div class="form-field">
+              <label for="setLogoText">Logo kısaltması <span class="hint">örn: N&N</span></label>
+              <input type="text" id="setLogoText" maxlength="4" />
+            </div>
+            <div class="form-field">
+              <label for="setPhone">Telefon</label>
+              <input type="tel" id="setPhone" placeholder="0242 555 0142" />
+            </div>
+            <div class="form-field">
+              <label for="setWhatsapp">WhatsApp numarası <span class="hint">ülke koduyla, örn: 905xxxxxxxxx</span></label>
+              <input type="tel" id="setWhatsapp" placeholder="905425550142" />
+            </div>
+            <div class="form-field full">
+              <label for="setAddress">Adres</label>
+              <input type="text" id="setAddress" placeholder="Mahalle, Cadde No, Manavgat / Antalya" />
+            </div>
+            <div class="form-field">
+              <label for="setWorkHours">Çalışma saatleri</label>
+              <input type="text" id="setWorkHours" placeholder="Hafta içi 09:00–19:30" />
+            </div>
+            <div class="form-field">
+              <label for="setInstagram">Instagram linki</label>
+              <input type="url" id="setInstagram" placeholder="https://instagram.com/..." />
+            </div>
+          </div>
+          <div class="form-field full">
+            <label for="setTagline">Footer açıklaması</label>
+            <textarea id="setTagline"></textarea>
+          </div>
+          <div class="form-field full">
+            <label for="setHeroTitle">Ana sayfa başlığı <span class="hint">2 satır olacak şekilde yazın, ikinci satır vurgulu görünür</span></label>
+            <textarea id="setHeroTitle"></textarea>
+          </div>
+          <div class="form-field full">
+            <label for="setHeroSub">Ana sayfa alt açıklaması</label>
+            <textarea id="setHeroSub"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Ayarları Kaydet</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h3>Şifre Değiştir</h3>
+        <p class="panel-desc">Yönetim paneline giriş bilgilerinizi güncelleyin.</p>
+        <form id="passForm">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="newUser">Yeni kullanıcı adı</label>
+              <input type="text" id="newUser" />
+            </div>
+            <div class="form-field">
+              <label for="newPass">Yeni şifre</label>
+              <input type="text" id="newPass" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Şifreyi Güncelle</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ---------- Yedekleme ---------- -->
+    <section class="view" id="view-backup">
+      <div class="panel">
+        <h3>Verilerinizi Yedekleyin</h3>
+        <p class="panel-desc">
+          Tüm veriler bu tarayıcının hafızasında (localStorage) saklanır. Tarayıcı geçmişini
+          temizlerseniz veriler silinebilir — bu yüzden düzenli olarak yedek indirmeniz önerilir.
+        </p>
+        <div class="backup-actions">
+          <button class="btn btn-primary" id="exportBtn">⬇ Yedek İndir (JSON)</button>
+          <label class="btn btn-outline" for="importInput" style="cursor:pointer;">⬆ Yedekten Geri Yükle</label>
+          <input type="file" id="importInput" accept="application/json" style="display:none;" />
+          <button class="btn btn-danger" id="resetBtn">Varsayılana Sıfırla</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>GitHub'a Yükleme Notu</h3>
+        <p class="panel-desc" style="margin-bottom:0;">
+          Bu site tamamen statiktir; GitHub Pages, Netlify veya Vercel'e olduğu gibi yüklenebilir.
+          Detaylı adımlar proje köküne eklenen <strong>README.md</strong> dosyasındadır. Not: localStorage
+          tarayıcıya özeldir — birden fazla kişi yönetiyorsa her yönetici kendi tarayıcısında ayrı
+          veri görür; bu yüzden yedek dosyasını ortak saklamanız (ör. Drive) önerilir.
+        </p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/store-data.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>

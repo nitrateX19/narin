@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nakış & Nine | Manavgat İç Giyim & Tuhafiye</title>
+<meta name="description" content="Manavgat, Antalya'da iç giyim ve tuhafiye mağazası. Sütyen, gecelik, çorap, iplik, iğne, düğme ve daha fazlası." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="#" class="brand">
+      <span class="brand-mark" id="brandMark">N&N</span>
+      <span>
+        <span class="brand-name" id="brandName">Nakış & Nine</span><br />
+        <span class="brand-tagline" id="brandTagline">Manavgat</span>
+      </span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#kategoriler">Kategoriler</a>
+      <a href="#urunler">Ürünler</a>
+      <a href="#hakkimizda">Hakkımızda</a>
+      <a href="#iletisim">İletişim</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-whatsapp btn-sm" id="headerWhatsapp" href="#" target="_blank" rel="noopener">
+        WhatsApp
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menüyü aç">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Manavgat Çarşısı · 1998'den beri</span>
+      <h1 class="hero-title" id="heroTitle">İğneden ipliğe, tenden tenine<br/><span class="accent">Manavgat'ın dikiş kutusu</span></h1>
+      <p class="hero-sub" id="heroSub">Konforlu iç giyimden düğmesine, fermuarına, dantelasına kadar; teyzenizin bile bulamadığı tuhafiye ürünleri Manavgat çarşısında sizi bekliyor.</p>
+      <div class="hero-actions">
+        <a href="#urunler" class="btn btn-primary">Ürünleri Keşfet</a>
+        <a href="#iletisim" class="btn btn-ghost">Mağazayı Ziyaret Et</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=800&auto=format&fit=crop" alt="Tuhafiye ve iç giyim mağazası vitrini" />
+      <div class="hero-badge">
+        <span>🧵</span>
+        <span><strong id="catCount">5</strong>kategori, tek çatı altında</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="stitch-divider" />
+
+<section class="section" id="kategoriler">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Nereden başlasak</span>
+        <h2 class="section-title">Kategoriler</h2>
+      </div>
+      <p style="max-width:32ch;color:var(--ink-soft);font-size:0.9rem;margin:0;">Bir kategoriye dokunun, aşağıdaki ürün listesi otomatik filtrelensin.</p>
+    </div>
+    <div class="cat-row" id="categoryRow"></div>
+  </div>
+</section>
+
+<section class="section" id="urunler" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Vitrin</span>
+        <h2 class="section-title">Ürünlerimiz</h2>
+      </div>
+    </div>
+    <div class="filter-bar" id="filterBar"></div>
+    <div class="grid" id="productGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">Bu kategoride henüz ürün eklenmedi. Yakında burada olacak ✂️</div>
+  </div>
+</section>
+
+<section class="about-strip" id="hakkimizda">
+  <div class="wrap about-grid">
+    <div class="about-item">
+      <span class="num">01</span>
+      <h3>Yerel & Güvenilir</h3>
+      <p>Manavgat çarşısında yıllardır aynı vitrin, aynı güler yüz. Ürünü elinize alıp bakmak isterseniz kapımız açık.</p>
+    </div>
+    <div class="about-item">
+      <span class="num">02</span>
+      <h3>WhatsApp'tan Sipariş</h3>
+      <p>Beğendiğiniz ürünü tek tıkla WhatsApp'tan sorabilir, stok ve teslimat detayını anında öğrenebilirsiniz.</p>
+    </div>
+    <div class="about-item">
+      <span class="num">03</span>
+      <h3>Geniş Tuhafiye Reyonu</h3>
+      <p>İplikten fermuara, düğmeden dantelaya; el işi ve tamir için ihtiyacınız olan her küçük parça burada.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer" id="iletisim">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="brand-name" id="footerBrandName">Nakış & Nine</span>
+        <p id="footerTagline">Manavgat'ın iç giyim ve tuhafiye adresi. Aradığınız düğmeden içliğe, mağazamızda bulamayacağınız çok az şey var.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Mağaza</h4>
+        <p id="footerAddress">Manavgat, Antalya</p>
+        <p id="footerHours">Hafta içi 09:00–19:30</p>
+      </div>
+      <div class="footer-col">
+        <h4>İletişim</h4>
+        <a id="footerPhone" href="tel:0">Telefon</a>
+        <a id="footerWhatsapp" href="#" target="_blank" rel="noopener">WhatsApp'tan Yaz</a>
+        <a id="footerInstagram" href="#" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> <span id="footerYearBrand">Nakış & Nine</span>. Tüm hakları saklıdır.</span>
+      <a href="admin.html">Yönetim Paneli</a>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Kapat">✕</button>
+    <div class="modal-img"><img id="modalImg" src="" alt="" /></div>
+    <div class="modal-info">
+      <span class="product-cat" id="modalCat"></span>
+      <h3 id="modalName"></h3>
+      <p class="desc" id="modalDesc"></p>
+      <div class="modal-price">
+        <span class="price-now" id="modalPrice"></span>
+        <span class="price-old" id="modalOldPrice"></span>
+      </div>
+      <span class="modal-stock" id="modalStock"></span>
+      <div class="modal-actions">
+        <a class="btn btn-whatsapp" id="modalWhatsapp" href="#" target="_blank" rel="noopener">WhatsApp'tan Sor</a>
+        <a class="btn btn-ghost" id="modalCall" href="tel:0">Ara</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/store-data.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
